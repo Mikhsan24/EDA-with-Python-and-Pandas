@@ -1,0 +1,66 @@
+Panda = data manipulation library
+Numphy = Scientific Computing Library
+Matplotlib and Seaborn = Viz library
+Calmap= heat map libary
+################################################
+
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import calmap
+from pandas_profiling import ProfileReport
+
+## Link to data source: https://www.kaggle.com/aungpyaeap/supermarket-sales
+
+df = pd.read_csv('supermarket_sales.csv')
+df.tail(10)
+df.dtypes
+df['Date'] = pd.to_datetime(df['Date'])
+df.set_index('Date',inplace=True)
+df.describe()
+
+
+## Univariate Analysis
+
+-- what does the distribution of customer ratings looks like?
+
+sns.distplot(df['Rating'])
+plt.axvline(x=np.mean(df['Rating']),c='red',ls='--',label='mean')
+plt.axvline(x=np.percentile(df['Rating'],25),c='green',ls='--',label='25-75th percentile')
+plt.axvline(x=np.percentile(df['Rating'],75),c='green',ls='--')
+plt.legend()
+
+df.hist(figsize=(10,10)) --to check all graphs start from unitprice and so on
+
+-- do aggregate sales numbers differ by much between branches?
+
+sns.countplot(df['Branch'])
+df['Branch'].value_counts()
+sns.countplot(df['Payment'])
+df['Payment'].value_counts()
+
+
+## Bivariate Analysis
+
+--Is there a relationship between gross income and customer ratings?
+
+sns.scatterplot(df['Rating'],df['gross income'])
+sns.regplot(df['Rating'],df['gross income'])
+sns.boxplot(x=df['Branch'],y=df['gross income'])
+sns.boxplot(x=df['Gender'],y=df['gross income'])
+
+--Is there a noticeable time trend in gross income
+
+df.groupby(df.index).mean().index -- as time in x
+df.groupby(df.index).mean()['gross income'] --as gross income in y
+sns.lineplot(x=df.groupby(df.index).mean().index,
+	     y=df.groupby(df.index).mean()['gross income'])
+sns.pairplot(df) --plot every bivariate relation as possible
+
+
+
+
+
+
