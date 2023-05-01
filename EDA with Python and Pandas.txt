@@ -60,6 +60,37 @@ sns.lineplot(x=df.groupby(df.index).mean().index,
 sns.pairplot(df) --plot every bivariate relation as possible
 
 
+## Dealing with Duplicate Rows and Missing Values
+
+df.duplicated().sum() --check how many rows are duplicated
+df(df.duplicated()==True) --check the duplicate rows
+df.drop_duplicated(inplace=True) --to drop duplicate permanently
+
+df.isna().sum() --check the missing values
+sns.heatmap(df.isnull(),cbar=False) --apply heatmap to check null value
+df.fillna(df.mean(),inplace=True) --Fill N/A with mean and inplace it permanently
+df.fillna(df.mode().iloc[0],inplace=True) --change NA value in categorical columns
+
+-- Panda profiling package
+dataset = pd.read_csv('supermarket_sales.csv')
+prof = ProfileReport(dataset)
+prof
+
+
+## Correlation Analysis
+
+--correlation with two columns (use numphy)
+round(np.corrcoef(df['gross income'],df['Rating'])[1][0],2) --find correlation between gross income and rating
+np.round(df.corr(),2) --calculate every pair numeric columns
+sns.heatmap(np.round(df.corr(),2),annot=True) --display heatmap with correlation and annotation
+
+
+
+
+
+
+
+
 
 
 
